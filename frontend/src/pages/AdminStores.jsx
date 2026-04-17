@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Store, ArrowLeft } from 'lucide-react';
+import { Store, Trash2 } from 'lucide-react';
 import api from '../services/api';
 import Table from '../components/Table';
 import { validateName, validateEmail, validatePassword, validateAddress } from '../utils/validators';
@@ -49,22 +49,35 @@ const AdminStores = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this store?')) return;
+    try {
+      await api.delete(`/admin/stores/${id}`);
+      setStores(stores.filter(s => s.id !== id));
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete store');
+    }
+  };
+
   const columns = [
     { key: 'id', label: 'ID', sortable: true },
     { key: 'name', label: 'Store Name', sortable: true },
     { key: 'email', label: 'Store Email' },
     { key: 'averageRating', label: 'Rating', sortable: true, render: (val) => `${val}/5` },
     { key: 'owner_name', label: 'Owner', render: (val, row) => row.owner?.name },
+    { key: 'actions', label: 'Actions', render: (_, row) => (
+      <button onClick={() => handleDelete(row.id)} className="btn btn-danger" style={{ padding: '0.4rem 0.8rem' }} title="Delete Store">
+        <Trash2 size={16} />
+      </button>
+    ) }
   ];
 
   return (
     <div className="page-container">
-      <header className="app-header mb-8 glass-panel" style={{ borderRadius: '1rem' }}>
-        <h1 className="app-title flex items-center gap-2"><ArrowLeft className="cursor-pointer" onClick={() => window.history.back()} /> <Store /> Store Management</h1>
-        <div className="header-actions">
-          <button className="btn btn-primary" onClick={() => setShowAdd(!showAdd)}>{showAdd ? 'Cancel' : 'Add Store & Owner'}</button>
-        </div>
-      </header>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--primary)' }}><Store /> Store Management</h1>
+        <button className="btn btn-primary" onClick={() => setShowAdd(!showAdd)}>{showAdd ? 'Cancel' : 'Add Store & Owner'}</button>
+      </div>
 
       {showAdd && (
         <div className="glass-panel p-8 mb-8">

@@ -37,12 +37,9 @@ const StoreOwnerDashboard = () => {
 
   return (
     <div className="page-container">
-      <header className="app-header mb-8 glass-panel" style={{ borderRadius: '1rem' }}>
-        <h1 className="app-title flex items-center gap-2"><Briefcase /> Store Owner Dashboard</h1>
-        <div className="header-actions">
-          <button className="btn btn-danger" onClick={() => { localStorage.clear(); window.location.href='/login'; }}>Logout</button>
-        </div>
-      </header>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--primary)' }}><Briefcase /> Store Owner Dashboard</h1>
+      </div>
 
       {loading ? (
         <p className="text-center">Loading dashboard...</p>

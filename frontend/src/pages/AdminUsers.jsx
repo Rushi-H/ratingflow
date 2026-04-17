@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, ArrowLeft } from 'lucide-react';
+import { Users, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import Table from '../components/Table';
@@ -50,22 +50,35 @@ const AdminUsers = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
+    try {
+      await api.delete(`/admin/users/${id}`);
+      setUsers(users.filter(u => u.id !== id));
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete user');
+    }
+  };
+
   const columns = [
     { key: 'id', label: 'ID', sortable: true },
     { key: 'name', label: 'Name', sortable: true },
     { key: 'email', label: 'Email', sortable: true },
     { key: 'role', label: 'Role', sortable: true, render: (val) => <span style={{ textTransform: 'capitalize' }}>{val.replace('_', ' ')}</span> },
     { key: 'address', label: 'Address' },
+    { key: 'actions', label: 'Actions', render: (_, row) => (
+      <button onClick={() => handleDelete(row.id)} className="btn btn-danger" style={{ padding: '0.4rem 0.8rem' }} title="Delete User">
+        <Trash2 size={16} />
+      </button>
+    ) }
   ];
 
   return (
     <div className="page-container">
-      <header className="app-header mb-8 glass-panel" style={{ borderRadius: '1rem' }}>
-        <h1 className="app-title flex items-center gap-2"><ArrowLeft className="cursor-pointer" onClick={() => window.history.back()} /> <Users /> User Management</h1>
-        <div className="header-actions">
-          <button className="btn btn-primary" onClick={() => setShowAdd(!showAdd)}>{showAdd ? 'Cancel' : 'Add User'}</button>
-        </div>
-      </header>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-2xl font-bold flex items-center gap-2"><Users className="text-primary" /> User Management</h1>
+        <button className="btn btn-primary" onClick={() => setShowAdd(!showAdd)}>{showAdd ? 'Cancel' : 'Add User'}</button>
+      </div>
 
       {showAdd && (
         <div className="glass-panel p-8 mb-8">

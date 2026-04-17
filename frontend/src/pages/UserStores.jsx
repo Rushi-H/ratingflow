@@ -67,13 +67,10 @@ const UserStores = () => {
 
   return (
     <div className="page-container">
-      <header className="app-header mb-8 glass-panel" style={{ borderRadius: '1rem' }}>
-        <h1 className="app-title flex items-center gap-2"><StoreIcon /> Store Directory</h1>
-        <div className="header-actions">
-          <span className="text-muted mr-4">User Portal</span>
-          <button className="btn btn-danger" onClick={() => { localStorage.clear(); window.location.href='/login'; }}>Logout</button>
-        </div>
-      </header>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--primary)' }}><StoreIcon /> Store Directory</h1>
+        <span className="text-muted">User Portal</span>
+      </div>
 
       <div className="glass-panel p-4 mb-8" style={{ padding: '1rem' }}>
         <form onSubmit={handleSearch} className="flex-row items-center w-full">

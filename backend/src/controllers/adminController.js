@@ -121,10 +121,32 @@ const getUsers = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.destroy({ where: { id } });
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+const deleteStore = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Store.destroy({ where: { id } });
+    res.json({ message: 'Store deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 module.exports = {
   createUser,
   createStore,
   getStats,
   getStores,
-  getUsers
+  getUsers,
+  deleteUser,
+  deleteStore
 };
